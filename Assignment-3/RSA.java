@@ -1,5 +1,4 @@
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class RSA {
@@ -9,8 +8,6 @@ public class RSA {
         System.out.print("Enter plaintext (string): ");
         String message = sc.nextLine();
 
-        BigInteger plaintext = new BigInteger(message.getBytes(StandardCharsets.UTF_8));
-
         System.out.print("Enter prime number p: ");
         BigInteger p = sc.nextBigInteger();
 
@@ -18,7 +15,6 @@ public class RSA {
         BigInteger q = sc.nextBigInteger();
 
         BigInteger n = p.multiply(q);
-
         BigInteger phi = (p.subtract(BigInteger.ONE)).multiply(q.subtract(BigInteger.ONE));
 
         BigInteger e = new BigInteger("65537");
@@ -28,17 +24,29 @@ public class RSA {
 
         BigInteger d = e.modInverse(phi);
 
-        BigInteger ciphertext = plaintext.modPow(e, n);
-
-        BigInteger decrypted = ciphertext.modPow(d, n);
-
-        String decryptedMessage = new String(decrypted.toByteArray(), StandardCharsets.UTF_8);
-
         System.out.println("\nPublic key (e, n): (" + e + ", " + n + ")");
         System.out.println("Private key (d, n): (" + d + ", " + n + ")");
         System.out.println("Plaintext : " + message);
-        System.out.println("Ciphertext: " + ciphertext);
-        System.out.println("Decrypted : " + decryptedMessage);
+
+        BigInteger[] ciphertexts = new BigInteger[message.length()];
+        for (int i = 0; i < message.length(); i++) {
+            BigInteger plainChar = BigInteger.valueOf((int) message.charAt(i));
+            ciphertexts[i] = plainChar.modPow(e, n);
+        }
+
+        System.out.print("Ciphertext: ");
+        for (BigInteger c : ciphertexts) {
+            System.out.print(c + " ");
+        }
+        System.out.println();
+
+        StringBuilder decrypted = new StringBuilder();
+        for (BigInteger c : ciphertexts) {
+            BigInteger decryptedChar = c.modPow(d, n);
+            decrypted.append((char) decryptedChar.intValue());
+        }
+
+        System.out.println("Decrypted : " + decrypted.toString());
 
         sc.close();
     }
