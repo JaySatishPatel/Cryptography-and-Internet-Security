@@ -28,7 +28,7 @@ public class DiffieHellman {
     }
 
     static boolean isPrimitiveRoot(BigInteger g, BigInteger p) {
-        BigInteger phi = p.subtract(BigInteger.ONE); // p-1
+        BigInteger phi = p.subtract(BigInteger.ONE); 
         Set<BigInteger> factors = primeFactors(phi);
 
         for (BigInteger factor : factors) {
@@ -46,7 +46,7 @@ public class DiffieHellman {
         System.out.print("Enter a prime number (p): ");
         BigInteger p = sc.nextBigInteger();
 
-        System.out.print("Enter a primitive root candidate (g): ");
+        System.out.print("\nEnter a primitive root candidate (g): ");
         BigInteger g = sc.nextBigInteger();
 
         if (!isPrimitiveRoot(g, p)) {
@@ -57,7 +57,7 @@ public class DiffieHellman {
             System.out.println("The given g = " + g + " is a VALID primitive root modulo p = " + p);
         }
 
-        System.out.print("Enter private key for A: ");
+        System.out.print("\nEnter private key for A: ");
         BigInteger a = sc.nextBigInteger();
 
         System.out.print("Enter private key for B: ");
